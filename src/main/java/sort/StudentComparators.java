@@ -1,4 +1,4 @@
-package sort;
+package src.main.java.sort;
 
 import model.Student;
 import java.util.Comparator;
