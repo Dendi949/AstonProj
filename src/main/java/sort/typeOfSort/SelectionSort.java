@@ -1,4 +1,4 @@
-package src.main.java.sort.TypeOfSort;
+package src.main.java.sort.typeOfSort;
 
 import java.util.Comparator;
 import java.util.List;
@@ -14,7 +14,7 @@ public final class SelectionSort<T> implements SortStrategy<T> {
             int minInd = i;
 
             for(int j=i+1;j<list.size();j++){
-                if(comparator.compare(list.get(j),list.get(minInd))>0){
+                if(comparator.compare(list.get(j),list.get(minInd))<0){
                     minInd=j;
                 }
             }

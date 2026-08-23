@@ -1,4 +1,4 @@
-package src.main.java.sort.TypeOfSort;
+package src.main.java.sort.typeOfSort;
 
 import java.util.Comparator;
 import java.util.List;
@@ -25,6 +25,4 @@ public class BubbleSort<T> implements SortStrategy<T>{
             }
         }
     }
-
-
 }
