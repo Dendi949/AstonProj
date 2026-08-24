@@ -36,9 +36,9 @@ public class ManualTests {
         // 1. Создание студента с корректными данными
         try {
             Student s = new Student.Builder()
-                    .setGroupNumber(5)
-                    .setAverageScore(4.5)
-                    .setRecordBookNumber("BK12345")
+                    .groupNumber(5)           // было .setGroupNumber
+                    .averageScore(4.5)        // было .setAverageScore
+                    .recordNumber("BK12345")  // было .setRecordBookNumber
                     .build();
             // Проверяем, что поля установлены правильно
             assert s.getGroupNumber() == 5;
@@ -50,7 +50,7 @@ public class ManualTests {
 
         // 2. Валидация: отрицательный номер группы -> ожидаем IllegalArgumentException
         try {
-            new Student.Builder().setGroupNumber(-1);
+            new Student.Builder().groupNumber(-1);
             throw new AssertionError("Validation failed: negative group");
         } catch (IllegalArgumentException e) {
             // Ожидаемое исключение – тест пройден
@@ -58,7 +58,7 @@ public class ManualTests {
 
         // 3. Валидация: средний балл > 5 -> ожидаем исключение
         try {
-            new Student.Builder().setAverageScore(6.0);
+            new Student.Builder().averageScore(6.0);
             throw new AssertionError("Validation failed: score > 5");
         } catch (IllegalArgumentException e) {
             // Ожидаемо
@@ -66,7 +66,7 @@ public class ManualTests {
 
         // 4. Валидация: пустой номер зачётки -> ожидаем исключение
         try {
-            new Student.Builder().setRecordBookNumber("");
+            new Student.Builder().recordNumber("");
             throw new AssertionError("Validation failed: empty book number");
         } catch (IllegalArgumentException e) {
             // Ожидаемо
