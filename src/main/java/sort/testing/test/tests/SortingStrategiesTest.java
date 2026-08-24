@@ -1,11 +1,12 @@
-package src.main.java.sort.testing.test.tests;
+package sort.testing.test.tests;
 
-import src.main.java.sort.comparators.AverageScoreComparator;
-import src.main.java.sort.testing.test.toolsForTest.ListOfStudentForTests;
-import src.main.java.sort.testing.test.toolsForTest.Assertion;
-import src.main.java.sort.testing.test.toolsForTest.TestRunner;
+
 import model.Student;
-import src.main.java.sort.typeOfSort.*;
+import sort.typeOfSort.*;
+import sort.comparators.AverageScoreComparator;
+import sort.testing.test.toolsForTest.Assertion;
+import sort.testing.test.toolsForTest.ListOfStudentForTests;
+import sort.testing.test.toolsForTest.TestRunner;
 
 import java.util.ArrayList;
 import java.util.List;

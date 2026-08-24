@@ -1,8 +1,8 @@
-package src.main.java.sort.testing.test;
+package sort.testing.test;
 
-import src.main.java.sort.testing.test.tests.SortingStrategiesTest;
-import src.main.java.sort.testing.test.tests.TestingComparator;
-import src.main.java.sort.testing.test.toolsForTest.TestRunner;
+import sort.testing.test.tests.SortingStrategiesTest;
+import sort.testing.test.tests.TestingComparator;
+import sort.testing.test.toolsForTest.TestRunner;
 
 public class MainForTest {
     public static void main(String[] args){

@@ -1,15 +1,15 @@
-package src.main.java.sort.testing.test.tests;
+package sort.testing.test.tests;
 
 import java.util.Comparator;
 import java.util.List;
 
 import model.Student;
-import src.main.java.sort.comparators.AverageScoreComparator;
-import src.main.java.sort.comparators.GroupNumberComparator;
-import src.main.java.sort.comparators.RecordBookNumberComparator;
-import src.main.java.sort.testing.test.toolsForTest.ListOfStudentForTests;
-import src.main.java.sort.testing.test.toolsForTest.Assertion;
-import src.main.java.sort.testing.test.toolsForTest.TestRunner;
+import sort.comparators.AverageScoreComparator;
+import sort.comparators.GroupNumberComparator;
+import sort.comparators.RecordBookNumberComparator;
+import sort.testing.test.toolsForTest.ListOfStudentForTests;
+import sort.testing.test.toolsForTest.Assertion;
+import sort.testing.test.toolsForTest.TestRunner;
 
 
 public class TestingComparator {

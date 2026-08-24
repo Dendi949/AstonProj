@@ -1,4 +1,5 @@
-package src.main.java.sort.typeOfSort;
+package sort.typeOfSort;
+
 import java.util.List;
 
 public final class Swap<T> {

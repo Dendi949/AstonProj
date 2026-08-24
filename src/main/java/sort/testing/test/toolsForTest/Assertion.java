@@ -1,4 +1,4 @@
-package src.main.java.sort.testing.test.toolsForTest;
+package sort.testing.test.toolsForTest;
 
 import java.util.Objects;
 

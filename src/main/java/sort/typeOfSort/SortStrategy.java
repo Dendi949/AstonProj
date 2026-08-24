@@ -1,4 +1,4 @@
-package src.main.java.sort.typeOfSort;
+package sort.typeOfSort;
 
 import java.util.Comparator;
 import java.util.List;
