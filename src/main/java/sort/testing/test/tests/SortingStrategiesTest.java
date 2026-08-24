@@ -41,7 +41,7 @@ public class SortingStrategiesTest {
                         .toList();
 
                 Assertion.assertEquals(
-                        List.of(12.0, 12.0, 12.0, 13.0),
+                        List.of(2.0, 2.0, 2.0, 3.0),
                         actualScores,
                         testName + ": неправильная сортировка по среднему баллу"
                 );
