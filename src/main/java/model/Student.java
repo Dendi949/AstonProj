@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Student {
     private final int groupNumber;
     private final double averageScore;
