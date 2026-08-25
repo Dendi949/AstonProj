@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * Класс Student, представляющий студента с тремя полями:
  * - номер группы (int)
