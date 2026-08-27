@@ -2,8 +2,8 @@ package service;
 
 import input.DataFiller;
 import model.Student;
-import sort.SortStrategy;
-import sort.StudentComparators;
+import sort.typeOfSort.SortStrategy;
+import sort.comparators.StudentComparators;
 
 import java.util.Comparator;
 import java.util.List;
