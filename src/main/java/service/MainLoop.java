@@ -4,6 +4,9 @@ import input.DataFiller;
 import model.Student;
 import sort.typeOfSort.SortStrategy;
 import sort.comparators.StudentComparators;
+import sort.typeOfSort.BubbleSort;
+import sort.typeOfSort.InsertSort;
+import sort.typeOfSort.SelectionSort;
 
 import java.util.Comparator;
 import java.util.List;
@@ -12,9 +15,10 @@ import java.util.Scanner;
 public class MainLoop {
 
     private Comparator<Student> selectedComparator;
-    private SortStrategy selectedStrategy;
+    private SortStrategy<Student> selectedStrategy;
     private List<Student> students = List.of();
     private final Scanner scanner = new Scanner(System.in);
+    private final FileWriterService fileWriterService = new FileWriterService();
 
     public void run() {
         boolean running = true;
@@ -35,7 +39,7 @@ public class MainLoop {
                     sortAndPrint(); // сортировка и вывод
                     break;
                 case 4:
-                    System.out.println("Запись в файл");
+                    writeToFile();
                     break;
                 case 0:
                     running = false;
@@ -118,10 +122,13 @@ public class MainLoop {
         students = DataFiller.fill(
                 DataFiller.FillType.RANDOM,
                 size,
-                null
-        );
+                null);
+        if (students.isEmpty()) {
+            System.out.println("Не удалось заполнить коллекцию.");
+        } else {
+            System.out.println("Коллекция заполнена.");
+        }
 
-        System.out.println("Коллекция заполнена.");
     }
 
     private void fillFromFile() {
@@ -132,10 +139,12 @@ public class MainLoop {
         students = DataFiller.fill(
                 DataFiller.FillType.FILE,
                 0,
-                path
-        );
-
-        System.out.println("Данные загружены.");
+                path);
+        if (students.isEmpty()) {
+            System.out.println("Не удалось загрузить данные.");
+        } else {
+            System.out.println("Данные загружены.");
+        }
     }
 
     private void fillManual() {
@@ -146,10 +155,12 @@ public class MainLoop {
         students = DataFiller.fill(
                 DataFiller.FillType.MANUAL,
                 size,
-                null
-        );
-
-        System.out.println("Коллекция заполнена.");
+                null);
+        if (students.isEmpty()) {
+            System.out.println("Не удалось заполнить коллекцию.");
+        } else {
+            System.out.println("Коллекция заполнена.");
+        }
     }
 
     private void selectStrategy() {
@@ -164,15 +175,18 @@ public class MainLoop {
 
         switch (choice) {
             case 1:
-                System.out.println("Пузырьковая сортировка будет доступна после реализации.");
+                selectedStrategy = new BubbleSort<>();
+                System.out.println("Выбрана пузырьковая сортировка.");
                 break;
 
             case 2:
-                System.out.println("Сортировка вставками будет доступна после реализации.");
+                selectedStrategy = new InsertSort<>();
+                System.out.println("Выбрана сортировка вставками.");
                 break;
 
             case 3:
-                System.out.println("Сортировка выбором будет доступна после реализации.");
+                selectedStrategy = new SelectionSort<>();
+                System.out.println("Выбрана сортировка выбором.");
                 break;
 
             case 0:
@@ -228,6 +242,7 @@ public class MainLoop {
             return;
         }
 
+        selectedComparator = null;
         selectComparator();
 
         if (selectedComparator == null) {
@@ -241,5 +256,17 @@ public class MainLoop {
         for (Student student : students) {
             System.out.println(student);
         }
+    }
+
+    private void writeToFile() {
+        if (students.isEmpty()) {
+            System.out.println("Коллекция пуста. Сначала заполните её.");
+            return;
+        }
+
+        System.out.print("Введите путь к файлу: ");
+        String filePath = scanner.nextLine();
+
+        fileWriterService.writeStudents(students, filePath);
     }
 }
