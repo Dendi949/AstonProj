@@ -38,7 +38,20 @@ public class Student {
             return this;
         }
         public Student build() {
+            validate();
             return new Student(this);
+        }
+
+        private void validate() {
+            if (groupNumber <= 0) {
+                throw new IllegalArgumentException("Номер группы должен быть положительным: " + groupNumber);
+            }
+            if (averageScore < 0.0 || averageScore > 5.0) {
+                throw new IllegalArgumentException("Средний балл должен быть в диапазоне [0.0, 5.0]: " + averageScore);
+            }
+            if (recordBookNumber == null || recordBookNumber.isBlank()) {
+                throw new IllegalArgumentException("Номер зачётной книжки не может быть пустым");
+            }
         }
     }
 }
