@@ -18,6 +18,297 @@
 4. Регулярно делать `pull` из `main`.
 5. После завершения создать Pull Request.
 
+
+## CustomList
+
+`CustomList<E>` — собственная обобщённая коллекция, которая хранит элементы во внутреннем массиве.
+
+Пример создания:
+```java
+CustomList&lt;Integer&gt; numbers = new CustomList&lt;&gt;();
+```
+
+### Добавление элементов
+```java
+numbers.add(10);
+numbers.add(20);
+numbers.add(30);
+```
+
+Добавление по индексу:
+```java
+numbers.add(1, 15);
+```
+
+Результат:
+```text
+[10, 15, 20, 30]
+```
+
+### Получение элемента
+```java
+Integer value = numbers.get(0);
+System.out.println(value);
+```
+
+### Замена элемента
+```java
+numbers.set(0, 100);
+```
+
+### Удаление по индексу
+```java
+numbers.remove(1);
+```
+
+### Удаление по значению
+```java
+numbers.remove(Integer.valueOf(20));
+```
+
+Для `Integer` используется `Integer.valueOf(...)`, чтобы вызвать удаление по значению, а не по индексу.
+
+### Получение размера
+```java
+int size = numbers.size();
+```
+
+### Проверка на пустоту
+```java
+boolean empty = numbers.isEmpty();
+```
+
+### Проверка наличия элемента
+```java
+boolean contains = numbers.contains(100);
+```
+
+### Поиск индекса
+```java
+int firstIndex = numbers.indexOf(100);
+int lastIndex = numbers.lastIndexOf(100);
+```
+
+Если элемент отсутствует, возвращается:
+```text
+-1
+```
+
+### Очистка коллекции
+```java
+numbers.clear();
+```
+
+### Обход коллекции
+```java
+for (Integer number : numbers) {
+    System.out.println(number);
+}
+```
+
+### Использование Stream API
+```java
+numbers.stream()
+        .filter(number -&gt; number &gt; 10)
+        .forEach(System.out::println);
+```
+### Сортировка
+```java
+numbers.sort(Integer::compareTo);
+```
+
+Для студентов можно использовать компараторы:
+```java
+students.sort(StudentComparators.byGroupNumber());
+students.sort(StudentComparators.byAverageScore());
+students.sort(StudentComparators.byRecordBookNumber());
+```
+## DataFiller
+
+Класс `DataFiller` поддерживает три способа заполнения коллекции:
+```java
+public enum FillType {
+    RANDOM,
+    FILE,
+    MANUAL
+}
+```
+
+Метод `fill` выбирает способ заполнения:
+```java
+CustomList&lt;Student&gt; students = DataFiller.fill(
+        DataFiller.FillType.RANDOM,
+        10,
+        null
+);
+```
+
+Параметры метода:
+
+- `type` — способ заполнения;
+- `size` — количество создаваемых студентов;
+- `filePath` — путь к CSV-файлу.
+
+Для режима `FILE` параметр `size` не используется. Для режимов `RANDOM` и `MANUAL` путь к файлу не требуется.
+
+## Случайное заполнение
+
+Прямой вызов:
+```java
+CustomList&lt;Student&gt; students =
+        DataFiller.fillRandom(10);
+```
+
+Вызов через общий метод:
+```java
+CustomList&lt;Student&gt; students = DataFiller.fill(
+        DataFiller.FillType.RANDOM,
+        10,
+        null
+);
+```
+
+Будет создано `10` студентов со случайными допустимыми значениями.
+
+## Ручное заполнение
+
+Прямой вызов:
+```java
+CustomList&lt;Student&gt; students =
+        DataFiller.fillManually(3);
+```
+
+Вызов через общий метод:
+```java
+CustomList&lt;Student&gt; students = DataFiller.fill(
+        DataFiller.FillType.MANUAL,
+        3,
+        null
+);
+```
+
+Для каждого студента программа запросит:
+```text
+Введите номер группы:
+Введите средний балл:
+Введите номер зачётной книжки:
+```
+
+Если пользователь вводит неправильное значение, программа выводит сообщение об ошибке и повторяет запрос.
+
+Пример корректных значений:
+```text
+Номер группы: 101
+Средний балл: 4.5
+Номер зачётной книжки: RB-001
+```
+
+## Заполнение из файла
+
+Прямой вызов:
+```java
+CustomList&lt;Student&gt; students =
+        DataFiller.fillFromFile(
+                "src/main/resources/students.csv"
+        );
+```
+
+Вызов через общий метод:
+```java
+CustomList&lt;Student&gt; students = DataFiller.fill(
+        DataFiller.FillType.FILE,
+        0,
+        "src/main/resources/students.csv"
+);
+```
+
+Файл читается с помощью Stream API:
+```java
+Files.lines(Path.of(filePath))
+```
+
+Для накопления результатов используется `CustomList<Student>`, а не `ArrayList<Student>`.
+
+## Формат students.csv
+
+Пример файла `students.csv`:
+```csv
+groupNumber,averageScore,recordBookNumber
+101,4.75,RB-001
+203,3.90,RB-002
+102,5.00,RB-003
+301,2.85,RB-004
+205,4.20,RB-005
+```
+Каждая строка содержит:
+```text
+номер группы,средний балл,номер зачётной книжки
+```
+
+Файл должен быть сохранён в кодировке UTF-8.
+
+Поддерживаются:
+
+- заголовок CSV;
+- пустые строки;
+- пробелы вокруг значений;
+- BOM-символ в начале файла;
+- строки-комментарии, если они начинаются с `#`.
+
+Пример комментария:
+```csv
+# Список студентов
+groupNumber,averageScore,recordBookNumber
+101,4.75,RB-001
+```
+## Тестирование CustomList
+
+Тестами проверяются:
+
+- создание пустой коллекции;
+- добавление элементов;
+- добавление элемента по индексу;
+- получение элемента;
+- замена элемента;
+- удаление по индексу;
+- удаление по значению;
+- автоматическое увеличение внутреннего массива;
+- работа `contains`;
+- работа `indexOf`;
+- работа `lastIndexOf`;
+- очистка коллекции;
+- корректная работа `size`;
+- проверка выхода индекса за допустимые границы.
+
+Пример проверки:
+```java
+CustomList&lt;String&gt; list = new CustomList&lt;&gt;();
+
+list.add("A");
+list.add("B");
+list.add("C");
+
+if (list.size() != 3) {
+    throw new AssertionError(
+            "Ожидался размер 3, получен " + list.size()
+    );
+}
+
+if (!"B".equals(list.get(1))) {
+    throw new AssertionError(
+            "По индексу 1 должен находиться элемент B"
+    );
+}
+
+System.out.println("Тест успешно пройден");
+```
+
+Для запуска тестов откройте класс `CustomListTest` в IntelliJ IDEA и запустите метод `main`.
+
+При успешном прохождении тестов выводится сообщение:
+```text
+Все тесты CustomList успешно пройдены
+```
 ## Компараторы студентов
 
 Все компараторы реализуют интерфейс `Comparator<Student>` и задают сортировку студентов **по возрастанию** выбранного параметра.
