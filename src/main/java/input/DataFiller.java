@@ -95,14 +95,13 @@ public class DataFiller {
 
                              // Создаём студента через Builder — здесь сработает валидация
                              Student s = new Student.Builder()
-                                     .setGroupNumber(group)
-                                     .setAverageScore(score)
-                                     .setRecordBookNumber(record)
+                                     .groupNumber(group)
+                                     .averageScore(score)
+                                     .recordNumber(record)
                                      .build();
                              list.add(s);
-                         } catch (IllegalArgumentException | NumberFormatException e) {
+                         } catch (IllegalArgumentException e) {
                              // IllegalArgumentException — ошибка валидации Builder
-                             // NumberFormatException — неверный формат числа в CSV
                              System.err.println("Ошибка в строке '" + line + "': " + e.getMessage());
                          }
                      } else {
@@ -139,9 +138,9 @@ public class DataFiller {
                         try {
                             // Пытаемся создать студента — здесь сработает validate()
                             return new Student.Builder()
-                                    .setGroupNumber(group)
-                                    .setAverageScore(score)
-                                    .setRecordBookNumber(record)
+                                    .groupNumber(group)
+                                    .averageScore(score)
+                                    .recordNumber(record)
                                     .build();
                         } catch (IllegalArgumentException e) {
                             // Валидация не пройдена — генерируем заново
@@ -151,7 +150,7 @@ public class DataFiller {
                     throw new RuntimeException("Не удалось сгенерировать валидного студента за 1000 попыток");
                 })
                 // TODO: заменить на CustomArrayList при появлении реализации
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.toCollection(ArrayList<Student>::new));
     }
 
     /**
@@ -206,9 +205,9 @@ public class DataFiller {
                 try {
                     // Создаём студента — здесь сработает validate() в Builder
                     Student s = new Student.Builder()
-                            .setGroupNumber(group)
-                            .setAverageScore(score)
-                            .setRecordBookNumber(record)
+                            .groupNumber(group)
+                            .averageScore(score)
+                            .recordNumber(record)
                             .build();
                     list.add(s);
                     System.out.println("Студент добавлен.");

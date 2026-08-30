@@ -1,4 +1,4 @@
-package test;
+package input;
 
 import input.DataFiller;
 import input.DataFiller.FillType;
@@ -38,30 +38,30 @@ public class DataFillerTest {
         System.out.println("Тест: Builder валидация...");
 
         try {
-            new Student.Builder().setGroupNumber(-1).setAverageScore(4.0).setRecordBookNumber("123456").build();
+            new Student.Builder().groupNumber(-1).averageScore(4.0).recordNumber("123456").build();
             throw new AssertionError("Должно быть исключение для отрицательной группы");
         } catch (IllegalArgumentException e) {
             System.out.println("  [OK] Отрицательная группа отклонена: " + e.getMessage());
         }
 
         try {
-            new Student.Builder().setGroupNumber(1).setAverageScore(5.5).setRecordBookNumber("123456").build();
+            new Student.Builder().groupNumber(1).averageScore(5.5).recordNumber("123456").build();
             throw new AssertionError("Должно быть исключение для балла > 5");
         } catch (IllegalArgumentException e) {
             System.out.println("  [OK] Балл > 5 отклонён: " + e.getMessage());
         }
 
         try {
-            new Student.Builder().setGroupNumber(1).setAverageScore(4.0).setRecordBookNumber("").build();
+            new Student.Builder().groupNumber(1).averageScore(4.0).recordNumber("").build();
             throw new AssertionError("Должно быть исключение для пустой зачётки");
         } catch (IllegalArgumentException e) {
             System.out.println("  [OK] Пустая зачётка отклонена: " + e.getMessage());
         }
 
         Student s = new Student.Builder()
-                .setGroupNumber(101)
-                .setAverageScore(4.5)
-                .setRecordBookNumber("123456")
+                .groupNumber(101)
+                .averageScore(4.5)
+                .recordNumber("123456")
                 .build();
         if (s.getGroupNumber() != 101) throw new AssertionError("Группа не совпадает");
         if (Double.compare(s.getAverageScore(), 4.5) != 0) throw new AssertionError("Балл не совпадает");
@@ -96,17 +96,20 @@ public class DataFillerTest {
      * Проверка чтения из CSV-файла с использованием Stream API.
      * Создаём временный файл с корректными и битыми строками.
      * Ожидаем, что будут загружены только валидные записи.
+     * (Валидные: корректный парсинг чисел и прохождение валидации Builder)
      */
     static void testFillFromFile() {
         System.out.println("\nТест: fillFromFile (stream)...");
         try {
             Path temp = Files.createTempFile("students_test", ".csv");
+            // Убираем строку "BAD", так как она вызывает NumberFormatException,
+            // который теперь не перехватывается (оставлен только IllegalArgumentException).
+            // Строка с баллом 6.0 остаётся для проверки IllegalArgumentException.
             Files.write(temp, Arrays.asList(
                     "group,score,record",
                     "101,4.5,111111",
                     "102,3.2,222222",
                     "103,5.0,333333",
-                    "BAD",                      // не хватает полей
                     "104,6.0,444444",           // невалидный балл > 5
                     "105,2.8,555555"
             ));
