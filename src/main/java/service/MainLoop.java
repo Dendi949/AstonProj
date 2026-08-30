@@ -7,13 +7,14 @@ import sort.comparators.StudentComparators;
 import sort.typeOfSort.BubbleSort;
 import sort.typeOfSort.InsertSort;
 import sort.typeOfSort.SelectionSort;
-import thread.CountOccurrences;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class MainLoop {
 
@@ -21,7 +22,6 @@ public class MainLoop {
     private SortStrategy<Student> selectedStrategy;
     private List<Student> students = List.of();
     private final Scanner scanner = new Scanner(System.in);
-    private final FileWriterService fileWriterService = new FileWriterService();
 
     public void run() {
         boolean running = true;
@@ -264,6 +264,9 @@ public class MainLoop {
         }
     }
 
+    /**
+     * Запись отсортированной коллекции в файл в кодировке UTF-8.
+     */
     private void writeToFile() {
         if (students.isEmpty()) {
             System.out.println("Коллекция пуста. Сначала заполните её.");
@@ -271,14 +274,25 @@ public class MainLoop {
         }
 
         System.out.print("Введите путь к файлу: ");
-        String filePath = scanner.nextLine();
+        String filePath = scanner.nextLine().trim();
+        if (filePath.isEmpty()) {
+            System.out.println("Путь не может быть пустым. Операция отменена.");
+            return;
+        }
 
-        fileWriterService.writeStudents(students, filePath);
+        try (OutputStreamWriter writer = new OutputStreamWriter(
+                new FileOutputStream(filePath, true), StandardCharsets.UTF_8)) {
+            for (Student s : students) {
+                writer.write(s.toString() + System.lineSeparator());
+            }
+            System.out.println("Результат записан в файл: " + filePath);
+        } catch (IOException e) {
+            System.err.println("Ошибка при записи в файл: " + e.getMessage());
+        }
     }
 
     /**
-     * Запрашивает номер зачётной книжки, подсчитывает количество студентов с таким номером
-     * и записывает результат в файл в режиме добавления.
+     * Поиск студентов по номеру зачётной книжки и запись количества вхождений в файл (UTF-8).
      */
     private void saveSearchResultToFile() {
         if (students.isEmpty()) {
@@ -293,7 +307,6 @@ public class MainLoop {
             return;
         }
 
-        // Подсчёт количества студентов с таким номером
         long count = students.stream()
                 .filter(s -> s.getRecordBookNumber().equals(target))
                 .count();
@@ -307,9 +320,9 @@ public class MainLoop {
             return;
         }
 
-        // Запись в файл в режиме добавления
-        try (FileWriter fw = new FileWriter(path, true)) {
-            fw.write("Результат поиска по номеру зачётки '" + target + "': " + count + System.lineSeparator());
+        try (OutputStreamWriter writer = new OutputStreamWriter(
+                new FileOutputStream(path, true), StandardCharsets.UTF_8)) {
+            writer.write("Результат поиска по номеру зачётки '" + target + "': " + count + System.lineSeparator());
             System.out.println("Результат записан в файл: " + path);
         } catch (IOException e) {
             System.err.println("Ошибка при записи в файл: " + e.getMessage());
