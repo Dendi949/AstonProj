@@ -7,10 +7,13 @@ import sort.comparators.StudentComparators;
 import sort.typeOfSort.BubbleSort;
 import sort.typeOfSort.InsertSort;
 import sort.typeOfSort.SelectionSort;
+import thread.CountOccurrences;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class MainLoop {
 
@@ -30,16 +33,19 @@ public class MainLoop {
 
             switch (choice) {
                 case 1:
-                    fillCollection(); // заполнение коллекции
+                    fillCollection();
                     break;
                 case 2:
-                    selectStrategy(); // выбор стратегии
+                    selectStrategy();
                     break;
                 case 3:
-                    sortAndPrint(); // сортировка и вывод
+                    sortAndPrint();
                     break;
                 case 4:
                     writeToFile();
+                    break;
+                case 5:
+                    saveSearchResultToFile();
                     break;
                 case 0:
                     running = false;
@@ -83,6 +89,7 @@ public class MainLoop {
         System.out.println("2. Выбрать стратегию сортировки");
         System.out.println("3. Сортировать и вывести");
         System.out.println("4. Записать результат в файл");
+        System.out.println("5. Записать результат поиска (количество вхождений) в файл");
         System.out.println("0. Выход");
         System.out.print("Ваш выбор: ");
     }
@@ -128,7 +135,6 @@ public class MainLoop {
         } else {
             System.out.println("Коллекция заполнена.");
         }
-
     }
 
     private void fillFromFile() {
@@ -268,5 +274,45 @@ public class MainLoop {
         String filePath = scanner.nextLine();
 
         fileWriterService.writeStudents(students, filePath);
+    }
+
+    /**
+     * Запрашивает номер зачётной книжки, подсчитывает количество студентов с таким номером
+     * и записывает результат в файл в режиме добавления.
+     */
+    private void saveSearchResultToFile() {
+        if (students.isEmpty()) {
+            System.out.println("Коллекция пуста. Сначала заполните её.");
+            return;
+        }
+
+        System.out.print("Введите номер зачётной книжки для поиска: ");
+        String target = scanner.nextLine().trim();
+        if (target.isEmpty()) {
+            System.out.println("Номер не может быть пустым. Операция отменена.");
+            return;
+        }
+
+        // Подсчёт количества студентов с таким номером
+        long count = students.stream()
+                .filter(s -> s.getRecordBookNumber().equals(target))
+                .count();
+
+        System.out.println("Найдено студентов с номером '" + target + "': " + count);
+
+        System.out.print("Введите путь к файлу для записи результата: ");
+        String path = scanner.nextLine().trim();
+        if (path.isEmpty()) {
+            System.out.println("Путь не может быть пустым. Операция отменена.");
+            return;
+        }
+
+        // Запись в файл в режиме добавления
+        try (FileWriter fw = new FileWriter(path, true)) {
+            fw.write("Результат поиска по номеру зачётки '" + target + "': " + count + System.lineSeparator());
+            System.out.println("Результат записан в файл: " + path);
+        } catch (IOException e) {
+            System.err.println("Ошибка при записи в файл: " + e.getMessage());
+        }
     }
 }
