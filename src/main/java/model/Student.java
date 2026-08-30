@@ -96,7 +96,13 @@ public class Student {
          * Строит объект Student, проверяя, что все поля были заполнены.
          */
         public Student build() {
+<<<<<<< HEAD
             validate();
+=======
+            if (groupNumber == 0 || recordNumber == null) {
+                throw new IllegalStateException("Not all fields are set");
+            }
+>>>>>>> main
             return new Student(this);
         }
 
