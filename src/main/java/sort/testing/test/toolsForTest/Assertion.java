@@ -15,8 +15,7 @@ public final class Assertion {
 
     public static void assertEquals(Object expected, Object actual, String message) {
         if (!Objects.equals(expected, actual)) {
-            throw new AssertionError(message + ". Ожидалось: " + expected + ", получено: " + actual
-            );
+            throw new AssertionError(message + ". Ожидалось: " + expected + ", получено: " + actual);
         }
     }
 
@@ -27,17 +26,11 @@ public final class Assertion {
             if (expectedException.isInstance(actualException)) {
                 return;
             }
-
             throw new AssertionError(
-                    message
-                            + ". Получено исключение: "
-                            + actualException.getClass().getName(),
+                    message + ". Получено исключение: " + actualException.getClass().getName(),
                     actualException
             );
         }
-
-        throw new AssertionError(
-                message + ". Исключений не было"
-        );
+        throw new AssertionError(message + ". Исключений не было");
     }
 }

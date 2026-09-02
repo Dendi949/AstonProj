@@ -1,10 +1,10 @@
 package sort.comparators;
 
 import model.Student;
-
 import java.util.Comparator;
 
 public class StudentComparators {
+
     public static Comparator<Student> byGroupNumber() {
         return new GroupNumberComparator();
     }

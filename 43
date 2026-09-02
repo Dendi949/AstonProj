@@ -1,0 +1,8 @@
+Student{group=5, avg=0.97, book='RB-000001'}
+Student{group=5, avg=1.4, book='RB-000004'}
+Student{group=8, avg=2.24, book='RB-000007'}
+Student{group=9, avg=3.1, book='RB-000006'}
+Student{group=8, avg=3.35, book='RB-000003'}
+Student{group=7, avg=3.87, book='RB-000002'}
+Student{group=7, avg=4.41, book='RB-000005'}
+Результат поиска по номеру зачётки 'RB-000005': 1

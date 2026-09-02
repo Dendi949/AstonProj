@@ -5,7 +5,8 @@ import sort.testing.test.tests.TestingComparator;
 import sort.testing.test.toolsForTest.TestRunner;
 
 public class MainForTest {
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         TestRunner testRunner = new TestRunner();
         TestingComparator testingComparator = new TestingComparator();
 
@@ -13,5 +14,4 @@ public class MainForTest {
         SortingStrategiesTest.runAll(testRunner);
         testRunner.end();
     }
-
 }

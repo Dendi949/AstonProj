@@ -26,7 +26,9 @@ public class CountOccurrences {
      */
     public static <T> int countParallel(List<T> list, T target, int numThreads) throws InterruptedException {
         // Если список пуст или null – сразу возвращаем 0
-        if (list == null || list.isEmpty()) return 0;
+        if (list == null || list.isEmpty()) {
+            return 0;
+        }
 
         int size = list.size();
         // Вычисляем размер чанка (последний может быть меньше)
@@ -45,7 +47,9 @@ public class CountOccurrences {
             executor.submit(() -> {
                 int count = 0;
                 for (int j = start; j < end; j++) {
-                    if (list.get(j).equals(target)) count++;
+                    if (list.get(j).equals(target)) {
+                        count++;
+                    }
                 }
                 total.addAndGet(count); // атомарное добавление
             });

@@ -2,19 +2,19 @@ package service;
 
 import input.DataFiller;
 import model.Student;
-import sort.typeOfSort.SortStrategy;
 import sort.comparators.StudentComparators;
 import sort.typeOfSort.BubbleSort;
 import sort.typeOfSort.InsertSort;
 import sort.typeOfSort.SelectionSort;
+import sort.typeOfSort.SortStrategy;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.io.OutputStreamWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class MainLoop {
 
@@ -126,10 +126,7 @@ public class MainLoop {
 
         int size = readPositiveInt();
 
-        students = DataFiller.fill(
-                DataFiller.FillType.RANDOM,
-                size,
-                null);
+        students = DataFiller.fill(DataFiller.FillType.RANDOM, size, null);
         if (students.isEmpty()) {
             System.out.println("Не удалось заполнить коллекцию.");
         } else {
@@ -142,10 +139,7 @@ public class MainLoop {
 
         String path = scanner.nextLine();
 
-        students = DataFiller.fill(
-                DataFiller.FillType.FILE,
-                0,
-                path);
+        students = DataFiller.fill(DataFiller.FillType.FILE, 0, path);
         if (students.isEmpty()) {
             System.out.println("Не удалось загрузить данные.");
         } else {
@@ -158,10 +152,7 @@ public class MainLoop {
 
         int size = readPositiveInt();
 
-        students = DataFiller.fill(
-                DataFiller.FillType.MANUAL,
-                size,
-                null);
+        students = DataFiller.fill(DataFiller.FillType.MANUAL, size, null);
         if (students.isEmpty()) {
             System.out.println("Не удалось заполнить коллекцию.");
         } else {

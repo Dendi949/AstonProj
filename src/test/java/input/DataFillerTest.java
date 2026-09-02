@@ -1,7 +1,5 @@
 package input;
 
-import input.DataFiller;
-import input.DataFiller.FillType;
 import model.Student;
 
 import java.io.ByteArrayInputStream;
@@ -10,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Тесты для DataFiller.
@@ -63,9 +60,15 @@ public class DataFillerTest {
                 .averageScore(4.5)
                 .recordNumber("123456")
                 .build();
-        if (s.getGroupNumber() != 101) throw new AssertionError("Группа не совпадает");
-        if (Double.compare(s.getAverageScore(), 4.5) != 0) throw new AssertionError("Балл не совпадает");
-        if (!"123456".equals(s.getRecordBookNumber())) throw new AssertionError("Номер зачётки не совпадает");
+        if (s.getGroupNumber() != 101) {
+            throw new AssertionError("Группа не совпадает");
+        }
+        if (Double.compare(s.getAverageScore(), 4.5) != 0) {
+            throw new AssertionError("Балл не совпадает");
+        }
+        if (!"123456".equals(s.getRecordBookNumber())) {
+            throw new AssertionError("Номер зачётки не совпадает");
+        }
         System.out.println("  [OK] Корректный студент создан: " + s);
     }
 
@@ -76,12 +79,14 @@ public class DataFillerTest {
      */
     static void testFillRandom() {
         System.out.println("\nТест: fillRandom...");
-        List<Student> list = DataFiller.fill(FillType.RANDOM, 5, null);
+        List<Student> list = DataFiller.fill(DataFiller.FillType.RANDOM, 5, null);
         if (list.size() != 5) {
             throw new AssertionError("Ожидалось 5, получено " + list.size());
         }
         for (Student s : list) {
-            if (s.getGroupNumber() <= 0) throw new AssertionError("Некорректная группа: " + s.getGroupNumber());
+            if (s.getGroupNumber() <= 0) {
+                throw new AssertionError("Некорректная группа: " + s.getGroupNumber());
+            }
             if (s.getAverageScore() < 0.0 || s.getAverageScore() > 5.0) {
                 throw new AssertionError("Некорректный балл: " + s.getAverageScore());
             }
@@ -102,24 +107,23 @@ public class DataFillerTest {
         System.out.println("\nТест: fillFromFile (stream)...");
         try {
             Path temp = Files.createTempFile("students_test", ".csv");
-            // Убираем строку "BAD", так как она вызывает NumberFormatException,
-            // который теперь не перехватывается (оставлен только IllegalArgumentException).
-            // Строка с баллом 6.0 остаётся для проверки IllegalArgumentException.
             Files.write(temp, Arrays.asList(
                     "group,score,record",
                     "101,4.5,111111",
                     "102,3.2,222222",
                     "103,5.0,333333",
-                    "104,6.0,444444",           // невалидный балл > 5
+                    "104,6.0,444444",   // невалидный балл > 5
                     "105,2.8,555555"
             ));
 
-            List<Student> list = DataFiller.fill(FillType.FILE, 10, temp.toString());
+            List<Student> list = DataFiller.fill(DataFiller.FillType.FILE, 10, temp.toString());
             // Ожидаем 4 корректных строки (101,102,103,105)
             if (list.size() != 4) {
                 throw new AssertionError("Ожидалось 4, получено " + list.size());
             }
-            if (list.get(0).getGroupNumber() != 101) throw new AssertionError("Первый студент не 101");
+            if (list.get(0).getGroupNumber() != 101) {
+                throw new AssertionError("Первый студент не 101");
+            }
             if (Double.compare(list.get(1).getAverageScore(), 3.2) != 0) {
                 throw new AssertionError("Второй студент не 3.2");
             }
@@ -139,22 +143,25 @@ public class DataFillerTest {
      */
     static void testFillManual() {
         System.out.println("\nТест: fillManual (имитация ввода)...");
-        // Сохраняем оригинальный System.in
         java.io.InputStream originalIn = System.in;
 
         try {
             String input = "101\n4.5\n123456\n102\n3.8\n654321\n";
             System.setIn(new ByteArrayInputStream(input.getBytes()));
 
-            // Используем публичный метод fill, который внутри вызовет fillManual с System.in
-            List<Student> list = DataFiller.fill(FillType.MANUAL, 2, null);
+            List<Student> list = DataFiller.fill(DataFiller.FillType.MANUAL, 2, null);
 
-            if (list.size() != 2) throw new AssertionError("Ожидалось 2, получено " + list.size());
-            if (list.get(0).getGroupNumber() != 101) throw new AssertionError("Первый студент не 101");
-            if (list.get(1).getGroupNumber() != 102) throw new AssertionError("Второй студент не 102");
+            if (list.size() != 2) {
+                throw new AssertionError("Ожидалось 2, получено " + list.size());
+            }
+            if (list.get(0).getGroupNumber() != 101) {
+                throw new AssertionError("Первый студент не 101");
+            }
+            if (list.get(1).getGroupNumber() != 102) {
+                throw new AssertionError("Второй студент не 102");
+            }
             System.out.println("  [OK] Ручной ввод работает корректно");
         } finally {
-            // Восстанавливаем оригинальный System.in
             System.setIn(originalIn);
         }
     }

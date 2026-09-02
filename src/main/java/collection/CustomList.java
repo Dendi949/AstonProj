@@ -1,9 +1,11 @@
 package collection;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Objects;
 
-
-public class CustomList<T> extends AbstractList<T>{
+public class CustomList<T> extends AbstractList<T> {
 
     private static final int DEFAULT_CAPACITY = 10;
 
@@ -16,20 +18,14 @@ public class CustomList<T> extends AbstractList<T>{
 
     public CustomList(int initialCapacity) {
         if (initialCapacity < 0) {
-            throw new IllegalArgumentException(
-                    "Вместимость не может быть отрицательной"
-            );
+            throw new IllegalArgumentException("Вместимость не может быть отрицательной");
         }
-
         elements = new Object[initialCapacity];
     }
 
     public CustomList(Collection<? extends T> source) {
         this();
-        addAll(Objects.requireNonNull(
-                source,
-                "Коллекция не должна быть null"
-        ));
+        addAll(Objects.requireNonNull(source, "Коллекция не должна быть null"));
     }
 
     @Override
@@ -53,10 +49,8 @@ public class CustomList<T> extends AbstractList<T>{
     @Override
     public T set(int index, T element) {
         checkElementIndex(index);
-
         T previousElement = (T) elements[index];
         elements[index] = element;
-
         return previousElement;
     }
 
@@ -70,19 +64,10 @@ public class CustomList<T> extends AbstractList<T>{
     public void add(int index, T element) {
         checkPositionIndex(index);
         ensureCapacity(size + 1);
-
         int elementsToMove = size - index;
-
         if (elementsToMove > 0) {
-            System.arraycopy(
-                    elements,
-                    index,
-                    elements,
-                    index + 1,
-                    elementsToMove
-            );
+            System.arraycopy(elements, index, elements, index + 1, elementsToMove);
         }
-
         elements[index] = element;
         size++;
         modCount++;
@@ -94,47 +79,21 @@ public class CustomList<T> extends AbstractList<T>{
     }
 
     @Override
-    public boolean addAll(
-            int index,
-            Collection<? extends T> source
-    ) {
+    public boolean addAll(int index, Collection<? extends T> source) {
         checkPositionIndex(index);
-        Objects.requireNonNull(
-                source,
-                "Добавляемая коллекция не должна быть null"
-        );
-
+        Objects.requireNonNull(source, "Добавляемая коллекция не должна быть null");
         Object[] newElements = source.toArray();
-
         if (newElements.length == 0) {
             return false;
         }
-
         ensureCapacity(size + newElements.length);
-
         int elementsToMove = size - index;
-
         if (elementsToMove > 0) {
-            System.arraycopy(
-                    elements,
-                    index,
-                    elements,
-                    index + newElements.length,
-                    elementsToMove
-            );
+            System.arraycopy(elements, index, elements, index + newElements.length, elementsToMove);
         }
-
-        System.arraycopy(
-                newElements,
-                0,
-                elements,
-                index,
-                newElements.length
-        );
-
+        System.arraycopy(newElements, 0, elements, index, newElements.length);
         size += newElements.length;
         modCount++;
-
         return true;
     }
 
@@ -142,34 +101,22 @@ public class CustomList<T> extends AbstractList<T>{
     @Override
     public T remove(int index) {
         checkElementIndex(index);
-
         T removedElement = (T) elements[index];
         int elementsToMove = size - index - 1;
-
         if (elementsToMove > 0) {
-            System.arraycopy(
-                    elements,
-                    index + 1,
-                    elements,
-                    index,
-                    elementsToMove
-            );
+            System.arraycopy(elements, index + 1, elements, index, elementsToMove);
         }
-
         elements[--size] = null;
         modCount++;
-
         return removedElement;
     }
 
     @Override
     public boolean remove(Object target) {
         int index = indexOf(target);
-
         if (index < 0) {
             return false;
         }
-
         remove(index);
         return true;
     }
@@ -186,7 +133,6 @@ public class CustomList<T> extends AbstractList<T>{
                 return i;
             }
         }
-
         return -1;
     }
 
@@ -197,7 +143,6 @@ public class CustomList<T> extends AbstractList<T>{
                 return i;
             }
         }
-
         return -1;
     }
 
@@ -206,7 +151,6 @@ public class CustomList<T> extends AbstractList<T>{
         if (size == 0) {
             return;
         }
-
         Arrays.fill(elements, 0, size, null);
         size = 0;
         modCount++;
@@ -216,16 +160,12 @@ public class CustomList<T> extends AbstractList<T>{
         if (requiredCapacity <= elements.length) {
             return;
         }
-
         int currentCapacity = elements.length;
         int increasedCapacity = currentCapacity + currentCapacity / 2;
-
         int newCapacity = Math.max(DEFAULT_CAPACITY, increasedCapacity);
-
         if (newCapacity < requiredCapacity) {
             newCapacity = requiredCapacity;
         }
-
         elements = Arrays.copyOf(elements, newCapacity);
     }
 
